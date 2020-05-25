@@ -15,8 +15,3 @@ keycloak_group: keycloak
 keycloak_bind_address: 0.0.0.0
 keycloak_http_port: 8080
 keycloak_https_port: 8443
-keycloak_management_http_port: 9990
-
-# User
-#keycloak_username: admin
-#keycloak_password: admin
