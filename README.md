@@ -21,6 +21,6 @@ $ ansible-playbook playbook.yml
 
 ## To Do
 
-[ ] Use certificate from let's encrypt
-[ ] Hardening systemd unit file
-[ ] Manage reboot after system upgrade (/var/run/reboot-required)
+- [ ] Use certificate from let's encrypt
+- [ ] Hardening systemd unit file
+- [ ] Manage reboot after system upgrade (/var/run/reboot-required)
