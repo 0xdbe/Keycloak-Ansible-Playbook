@@ -1,0 +1,15 @@
+---
+
+- name: keycloak
+  hosts: keycloak
+  vars_prompt:
+
+    - name: keycloak_username
+      prompt: "What is your username for keycloak user?"
+      private: no
+
+    - name: keycloak_password
+      prompt: "What is your password for keycloak user?"
+      
+  roles:
+    - keycloak

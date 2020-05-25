@@ -1,0 +1,54 @@
+---
+
+- name: create Keycloak user/group
+  user:
+    name: "{{ keycloak_user }}"
+    shell: /sbin/nologin
+    system: yes
+    create_home: no
+  become: yes
+  
+- name: create Keycloak root directory
+  file:
+    dest: "{{ keycloak_root_dir }}"
+    state: directory
+    owner: "{{ keycloak_user }}"
+    group: "{{ keycloak_group }}"
+  become: yes
+
+- name: create Keycloak unit file for systemd
+  template:
+    src: keycloak.service.j2
+    dest: /lib/systemd/system/keycloak.service
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+  notify:
+    - reload systemd
+    - restart keycloak
+
+- name: download Keycloak
+  unarchive:
+    remote_src: yes
+    src: "{{ keycloak_url }}"
+    dest: "{{ keycloak_root_dir }}"
+    creates: "{{ keycloak_working_dir }}"
+    owner: "{{ keycloak_user }}"
+    group: "{{ keycloak_group }}"
+  notify:
+    - restart keycloak
+  become: yes
+  
+- name: create Keycloak admin user
+  command:
+  args:
+    argv:
+      - "{{ keycloak_working_dir }}/bin/add-user-keycloak.sh"
+      - -rmaster
+      - -u{{ keycloak_username }}
+      - -p{{ keycloak_password }}
+    creates: "{{ keycloak_working_dir }}/standalone/configuration/keycloak-add-user.json"
+  notify:
+    - restart keycloak
+  become: yes

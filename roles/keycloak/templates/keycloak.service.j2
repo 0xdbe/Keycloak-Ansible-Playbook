@@ -1,0 +1,13 @@
+[Unit]
+Description=Keycloak server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User={{ keycloak_user }}
+Group={{ keycloak_group }}
+ExecStart={{ keycloak_working_dir }}/bin/standalone.sh
+WorkingDirectory={{ keycloak_working_dir }}
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,10 @@
+---
+
+# Init Ubuntu OS
+- include_tasks: 'ubuntu_init.yml'
+
+# Keycloak
+- include_tasks: 'keycloak.yml'
+
+# nginx as reverse proxy
+- include_tasks: 'nginx.yml'

@@ -1,0 +1,38 @@
+---
+
+- name: install nginx
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+  become: yes
+
+- name: Generate a self signed certificate
+  shell: |
+    openssl ecparam \
+      -out /etc/nginx/key.pem \
+      -name prime256v1 \
+      -genkey
+    openssl req \
+      -out /etc/nginx/cert.pem \
+      -new -nodes \
+      -key /etc/nginx/key.pem \
+      -x509 -days 365 \
+      -subj '/C=FR/ST=Paris/L=Paris/O=Security/OU=IT Department/CN=keycloak.bernaudeau.net'
+
+- name: create nginx config file
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+  notify:
+    - restart nginx
+    
+- name: Add firewall rule to allow HTTPS
+  ufw:
+    rule: allow
+    port: https
+    proto: tcp

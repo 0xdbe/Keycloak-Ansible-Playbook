@@ -1,0 +1,32 @@
+---
+
+- name: Update and upgrade packages
+  become: true
+  apt:
+    upgrade: 'yes'
+    update_cache: yes
+    
+- name: install unzip
+  apt:
+    name: unzip
+    state: present
+    update_cache: yes
+  become: yes
+  
+- name: install OpenJDK
+  apt:
+    name: openjdk-14-jdk
+    state: present
+    update_cache: yes
+  become: yes
+
+- name: Settings firewall default policy
+  ufw:
+    direction: incoming
+    policy: deny
+  
+- name: Add firewall rule to allow SSH
+  ufw:
+    rule: limit
+    port: ssh
+    proto: tcp
